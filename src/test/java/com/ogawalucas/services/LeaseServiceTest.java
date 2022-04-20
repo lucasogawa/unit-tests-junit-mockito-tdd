@@ -1,6 +1,5 @@
 package com.ogawalucas.services;
 
-import com.ogawalucas.entities.Lease;
 import com.ogawalucas.entities.Movie;
 import com.ogawalucas.entities.User;
 import org.junit.Assert;
@@ -21,7 +20,7 @@ public class LeaseServiceTest {
         var lease = new LeaseService().lease(user, movie);
 
         // Verification
-        Assert.assertTrue(lease.value() == 1.0);
+        Assert.assertEquals(1.0, lease.value(), 0.1);
         Assert.assertTrue(Objects.equals(lease.leaseDate(), LocalDate.now()));
         Assert.assertTrue(Objects.equals(lease.returnDate(), LocalDate.now().plusDays(1)));
     }
