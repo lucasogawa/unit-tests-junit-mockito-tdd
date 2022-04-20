@@ -2,11 +2,11 @@ package com.ogawalucas.services;
 
 import com.ogawalucas.entities.Movie;
 import com.ogawalucas.entities.User;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class LeaseServiceTest {
 
@@ -20,8 +20,8 @@ public class LeaseServiceTest {
         var lease = new LeaseService().lease(user, movie);
 
         // Verification
-        Assert.assertEquals(1.0, lease.value(), 0.1);
-        Assert.assertTrue(Objects.equals(lease.leaseDate(), LocalDate.now()));
-        Assert.assertTrue(Objects.equals(lease.returnDate(), LocalDate.now().plusDays(1)));
+        Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(1.0)));
+        Assert.assertThat(lease.leaseDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now())));
+        Assert.assertThat(lease.returnDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now().plusDays(1))));
     }
 }
