@@ -4,11 +4,16 @@ import com.ogawalucas.entities.Movie;
 import com.ogawalucas.entities.User;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import java.time.LocalDate;
 
 public class LeaseServiceTest {
+
+    @Rule
+    public ErrorCollector error = new ErrorCollector();
 
     @Test
     public void test() {
@@ -19,9 +24,14 @@ public class LeaseServiceTest {
         // Action
         var lease = new LeaseService().lease(user, movie);
 
-        // Verification
+        // Verification without rastreabilidad
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(1.0)));
         Assert.assertThat(lease.leaseDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now())));
         Assert.assertThat(lease.returnDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now().plusDays(1))));
+
+        // Verification with rastreabilidad
+        error.checkThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(1.0)));
+        error.checkThat(lease.leaseDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now())));
+        error.checkThat(lease.returnDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now().plusDays(1))));
     }
 }
