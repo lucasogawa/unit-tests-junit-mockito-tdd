@@ -2,6 +2,8 @@ package com.ogawalucas.services;
 
 import com.ogawalucas.entities.Movie;
 import com.ogawalucas.entities.User;
+import com.ogawalucas.exceptions.LeaseException;
+import com.ogawalucas.exceptions.MovieWithoutStockException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -38,8 +40,8 @@ public class LeaseServiceTest {
         error.checkThat(lease.returnDate(), CoreMatchers.is(CoreMatchers.equalTo(LocalDate.now().plusDays(1))));
     }
 
-    @Test(expected = Exception.class)
-    public void testWithoutExceptionMessageValidation() throws Exception {
+    @Test(expected = MovieWithoutStockException.class)
+    public void testWithoutExceptionMessageValidationWhenStockIsZero() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
         var movie = new Movie("movie", 0, 1.0);
@@ -49,7 +51,7 @@ public class LeaseServiceTest {
     }
 
     @Test
-    public void testWitExceptionMessageValidation() throws Exception {
+    public void testWithExceptionMessageValidationWhenStockIsZero() {
         // Scenery
         var user = new User("name");
         var movie = new Movie("movie", 0, 1.0);
@@ -65,14 +67,43 @@ public class LeaseServiceTest {
     }
 
     @Test
-    public void anotherTestWitExceptionMessageValidation() throws Exception {
+    public void anotherTestWithExceptionMessageValidationWhenStockIsZero() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
         var movie = new Movie("movie", 0, 1.0);
 
-        exception.expect(Exception.class);
+        exception.expect(MovieWithoutStockException.class);
         exception.expectMessage("Movie without stock.");
 
+        new LeaseService().lease(user, movie);
+    }
+
+    @Test
+    public void testWithExceptionMessageValidationWhenUserIsNull() {
+        // Scenery
+        User user = null;
+        var movie = new Movie("movie", 1, 1.0);
+
+        try {
+            // Action
+            new LeaseService().lease(user, movie);
+            Assert.fail("It should throw an exception.");
+        } catch (Exception ex) {
+            // Verification
+            Assert.assertThat(ex.getMessage(), CoreMatchers.is(CoreMatchers.equalTo("User empty.")));
+        }
+    }
+
+    @Test
+    public void testWithExceptionMessageValidationWhenUserMovieNull() throws LeaseException, MovieWithoutStockException {
+        // Scenery
+        var user = new User("name");
+        Movie movie = null;
+
+        exception.expect(LeaseException.class);
+        exception.expectMessage("Movie empty.");
+
+        // Action
         new LeaseService().lease(user, movie);
     }
 }
