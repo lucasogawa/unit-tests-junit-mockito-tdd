@@ -5,9 +5,7 @@ import com.ogawalucas.entities.User;
 import com.ogawalucas.exceptions.LeaseException;
 import com.ogawalucas.exceptions.MovieWithoutStockException;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
@@ -19,6 +17,26 @@ public class LeaseServiceTest {
     public ErrorCollector error = new ErrorCollector();
     @Rule
     public ExpectedException exception = ExpectedException.none();
+
+    @Before
+    public void setUp() {
+        System.out.println("Before Each Test.");
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After Each Test.");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
+        System.out.println("Before Class.");
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        System.out.println("After Class.");
+    }
 
     @Test
     public void test() throws Exception {
