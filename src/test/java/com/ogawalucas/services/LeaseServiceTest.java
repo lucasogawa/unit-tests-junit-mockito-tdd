@@ -11,6 +11,8 @@ import org.junit.rules.ExpectedException;
 
 import java.time.LocalDate;
 
+// Anotation to execute tests in name asceding order:
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LeaseServiceTest {
 
     @Rule
