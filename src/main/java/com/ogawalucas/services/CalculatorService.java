@@ -2,8 +2,6 @@ package com.ogawalucas.services;
 
 import com.ogawalucas.exceptions.InvalidNumberException;
 
-import java.math.BigDecimal;
-
 public class CalculatorService {
 
     public int sum(int a, int b) {
