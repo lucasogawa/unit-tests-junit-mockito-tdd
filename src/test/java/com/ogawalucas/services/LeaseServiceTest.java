@@ -2,6 +2,7 @@ package com.ogawalucas.services;
 
 import com.ogawalucas.entities.Movie;
 import com.ogawalucas.entities.User;
+import com.ogawalucas.exceptions.InvalidNumberException;
 import com.ogawalucas.exceptions.LeaseException;
 import com.ogawalucas.exceptions.MovieWithoutStockException;
 import org.hamcrest.CoreMatchers;
@@ -48,10 +49,10 @@ public class LeaseServiceTest {
     public void shouldLeaseMovie() throws Exception {
         // Scenery
         var user = new User("name");
-        var movie = List.of(new Movie("movie", 1, 1.0));
+        var movies = List.of(new Movie("movie", 1, 1.0));
 
         // Action
-        var lease = service.lease(user, movie);
+        var lease = service.lease(user, movies);
 
         // Verification without rastreabilidad
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(1.0)));
@@ -68,21 +69,21 @@ public class LeaseServiceTest {
     public void shouldThrowExceptionWhenStockIsZeroAndNotValidExceptionMessage() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
-        var movie = List.of(new Movie("movie", 0, 1.0));
+        var movies = List.of(new Movie("movie", 0, 1.0));
 
         // Action
-        service.lease(user, movie);
+        service.lease(user, movies);
     }
 
     @Test
     public void shouldThrowExceptionWhenStockIsZeroAndValidExceptionMessage() {
         // Scenery
         var user = new User("name");
-        var movie = List.of(new Movie("movie", 0, 1.0));
+        var movies = List.of(new Movie("movie", 0, 1.0));
 
         try {
             // Action
-            service.lease(user, movie);
+            service.lease(user, movies);
             Assert.fail("It should throw an exception.");
         } catch (Exception ex) {
             // Verification
@@ -94,23 +95,23 @@ public class LeaseServiceTest {
     public void shouldThrowExceptionWhenStockIsZeroAndNotValidExceptionMessageWithAnotherWay() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
-        var movie = List.of(new Movie("movie", 0, 1.0));
+        var movies = List.of(new Movie("movie", 0, 1.0));
 
         exception.expect(MovieWithoutStockException.class);
         exception.expectMessage("Movie without stock.");
 
-        service.lease(user, movie);
+        service.lease(user, movies);
     }
 
     @Test
     public void shouldThrowExceptionWhenUserIsNull() {
         // Scenery
         User user = null;
-        var movie = List.of(new Movie("movie", 1, 1.0));
+        var movies = List.of(new Movie("movie", 1, 1.0));
 
         try {
             // Action
-            service.lease(user, movie);
+            service.lease(user, movies);
             Assert.fail("It should throw an exception.");
         } catch (Exception ex) {
             // Verification
@@ -122,12 +123,82 @@ public class LeaseServiceTest {
     public void shouldThrowExceptionWhenMovieIsNull() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
-        List<Movie> movie = null;
+        List<Movie> movies = null;
 
         exception.expect(LeaseException.class);
         exception.expectMessage("Movie empty.");
 
         // Action
-        service.lease(user, movie);
+        service.lease(user, movies);
+    }
+
+    public void shouldPay75InThirteenMovie() throws LeaseException, MovieWithoutStockException {
+        // Scenery
+        var user = new User("name");
+        List<Movie> movies = List.of(
+            new Movie("Movie 1", 2, 4.0),
+            new Movie("Movie 2", 2, 4.0),
+            new Movie("Movie 3", 2, 4.0)
+        );
+
+        // Action
+        var lease = service.lease(user, movies);
+
+        // Verification
+        Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(11.0)));
+    }
+
+    public void shouldPay50InFourthMovie() throws LeaseException, MovieWithoutStockException {
+        // Scenery
+        var user = new User("name");
+        List<Movie> movies = List.of(
+            new Movie("Movie 1", 2, 4.0),
+            new Movie("Movie 2", 2, 4.0),
+            new Movie("Movie 3", 2, 4.0),
+            new Movie("Movie 4", 2, 4.0)
+        );
+
+        // Action
+        var lease = service.lease(user, movies);
+
+        // Verification
+        Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(13.0)));
+    }
+
+    public void shouldPay25InFifthMovie() throws LeaseException, MovieWithoutStockException {
+        // Scenery
+        var user = new User("name");
+        List<Movie> movies = List.of(
+            new Movie("Movie 1", 2, 4.0),
+            new Movie("Movie 2", 2, 4.0),
+            new Movie("Movie 3", 2, 4.0),
+            new Movie("Movie 4", 2, 4.0),
+            new Movie("Movie 5", 2, 4.0)
+        );
+
+        // Action
+        var lease = service.lease(user, movies);
+
+        // Verification
+        Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(14.0)));
+    }
+
+    public void shouldPay0InSixthMovie() throws LeaseException, MovieWithoutStockException {
+        // Scenery
+        var user = new User("name");
+        List<Movie> movies = List.of(
+            new Movie("Movie 1", 2, 4.0),
+            new Movie("Movie 2", 2, 4.0),
+            new Movie("Movie 3", 2, 4.0),
+            new Movie("Movie 4", 2, 4.0),
+            new Movie("Movie 5", 2, 4.0),
+            new Movie("Movie 6", 2, 4.0)
+        );
+
+        // Action
+        var lease = service.lease(user, movies);
+
+        // Verification
+        Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(14.0)));
     }
 }

@@ -8,6 +8,7 @@ import com.ogawalucas.exceptions.MovieWithoutStockException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class LeaseService {
 
@@ -27,9 +28,19 @@ public class LeaseService {
             movies,
             LocalDate.now(),
             LocalDate.now().plusDays(1),
-            movies.stream()
-                .map(Movie::leasePrice)
-                .reduce(0.0, Double::sum)
+            calculateValue(movies)
         );
+    }
+
+    private Double calculateValue(List<Movie> movies) {
+        return IntStream.rangeClosed(0, movies.size() - 1)
+            .mapToObj(index -> switch (index) {
+                case 2 -> 0.75 * movies.get(index).leasePrice();
+                case 3 -> 0.50 * movies.get(index).leasePrice();
+                case 4 -> 0.25 * movies.get(index).leasePrice();
+                case 5 -> 0.00 * movies.get(index).leasePrice();
+                default -> movies.get(index).leasePrice();
+            })
+            .reduce(0.0, Double::sum);
     }
 }
