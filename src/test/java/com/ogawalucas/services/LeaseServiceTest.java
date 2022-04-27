@@ -10,6 +10,7 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 // Anotation to execute tests in name asceding order:
 // @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -44,7 +45,7 @@ public class LeaseServiceTest {
     public void test() throws Exception {
         // Scenery
         var user = new User("name");
-        var movie = new Movie("movie", 1, 1.0);
+        var movie = List.of(new Movie("movie", 1, 1.0));
 
         // Action
         var lease = new LeaseService().lease(user, movie);
@@ -64,7 +65,7 @@ public class LeaseServiceTest {
     public void testWithoutExceptionMessageValidationWhenStockIsZero() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
-        var movie = new Movie("movie", 0, 1.0);
+        var movie = List.of(new Movie("movie", 0, 1.0));
 
         // Action
         new LeaseService().lease(user, movie);
@@ -74,7 +75,7 @@ public class LeaseServiceTest {
     public void testWithExceptionMessageValidationWhenStockIsZero() {
         // Scenery
         var user = new User("name");
-        var movie = new Movie("movie", 0, 1.0);
+        var movie = List.of(new Movie("movie", 0, 1.0));
 
         try {
             // Action
@@ -90,7 +91,7 @@ public class LeaseServiceTest {
     public void anotherTestWithExceptionMessageValidationWhenStockIsZero() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
-        var movie = new Movie("movie", 0, 1.0);
+        var movie = List.of(new Movie("movie", 0, 1.0));
 
         exception.expect(MovieWithoutStockException.class);
         exception.expectMessage("Movie without stock.");
@@ -102,7 +103,7 @@ public class LeaseServiceTest {
     public void testWithExceptionMessageValidationWhenUserIsNull() {
         // Scenery
         User user = null;
-        var movie = new Movie("movie", 1, 1.0);
+        var movie = List.of(new Movie("movie", 1, 1.0));
 
         try {
             // Action
@@ -118,7 +119,7 @@ public class LeaseServiceTest {
     public void testWithExceptionMessageValidationWhenUserMovieNull() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
-        Movie movie = null;
+        List<Movie> movie = null;
 
         exception.expect(LeaseException.class);
         exception.expectMessage("Movie empty.");
