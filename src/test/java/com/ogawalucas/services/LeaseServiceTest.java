@@ -21,9 +21,12 @@ public class LeaseServiceTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    private LeaseService service;
+
     @Before
     public void setUp() {
         System.out.println("Before Each Test.");
+        service = new LeaseService();
     }
 
     @After
@@ -42,13 +45,13 @@ public class LeaseServiceTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void shouldLeaseMovie() throws Exception {
         // Scenery
         var user = new User("name");
         var movie = List.of(new Movie("movie", 1, 1.0));
 
         // Action
-        var lease = new LeaseService().lease(user, movie);
+        var lease = service.lease(user, movie);
 
         // Verification without rastreabilidad
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(1.0)));
@@ -62,24 +65,24 @@ public class LeaseServiceTest {
     }
 
     @Test(expected = MovieWithoutStockException.class)
-    public void testWithoutExceptionMessageValidationWhenStockIsZero() throws LeaseException, MovieWithoutStockException {
+    public void shouldThrowExceptionWhenStockIsZeroAndNotValidExceptionMessage() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
         var movie = List.of(new Movie("movie", 0, 1.0));
 
         // Action
-        new LeaseService().lease(user, movie);
+        service.lease(user, movie);
     }
 
     @Test
-    public void testWithExceptionMessageValidationWhenStockIsZero() {
+    public void shouldThrowExceptionWhenStockIsZeroAndValidExceptionMessage() {
         // Scenery
         var user = new User("name");
         var movie = List.of(new Movie("movie", 0, 1.0));
 
         try {
             // Action
-            new LeaseService().lease(user, movie);
+            service.lease(user, movie);
             Assert.fail("It should throw an exception.");
         } catch (Exception ex) {
             // Verification
@@ -88,7 +91,7 @@ public class LeaseServiceTest {
     }
 
     @Test
-    public void anotherTestWithExceptionMessageValidationWhenStockIsZero() throws LeaseException, MovieWithoutStockException {
+    public void shouldThrowExceptionWhenStockIsZeroAndNotValidExceptionMessageWithAnotherWay() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
         var movie = List.of(new Movie("movie", 0, 1.0));
@@ -96,18 +99,18 @@ public class LeaseServiceTest {
         exception.expect(MovieWithoutStockException.class);
         exception.expectMessage("Movie without stock.");
 
-        new LeaseService().lease(user, movie);
+        service.lease(user, movie);
     }
 
     @Test
-    public void testWithExceptionMessageValidationWhenUserIsNull() {
+    public void shouldThrowExceptionWhenUserIsNull() {
         // Scenery
         User user = null;
         var movie = List.of(new Movie("movie", 1, 1.0));
 
         try {
             // Action
-            new LeaseService().lease(user, movie);
+            service.lease(user, movie);
             Assert.fail("It should throw an exception.");
         } catch (Exception ex) {
             // Verification
@@ -116,7 +119,7 @@ public class LeaseServiceTest {
     }
 
     @Test
-    public void testWithExceptionMessageValidationWhenUserMovieNull() throws LeaseException, MovieWithoutStockException {
+    public void shouldThrowExceptionWhenMovieIsNull() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
         List<Movie> movie = null;
@@ -125,6 +128,6 @@ public class LeaseServiceTest {
         exception.expectMessage("Movie empty.");
 
         // Action
-        new LeaseService().lease(user, movie);
+        service.lease(user, movie);
     }
 }

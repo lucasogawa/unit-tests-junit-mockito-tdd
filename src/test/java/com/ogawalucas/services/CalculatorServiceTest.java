@@ -15,7 +15,7 @@ public class CalculatorServiceTest {
     }
 
     @Test
-    public void mustSumTwoValues() {
+    public void shouldSumTwoValues() {
         // Scenery
         var a = 1;
         var b = 2;
@@ -28,7 +28,7 @@ public class CalculatorServiceTest {
     }
 
     @Test
-    public void mustSubtractTwoValues() {
+    public void shouldSubtractTwoValues() {
         // Scenery
         var a = 1;
         var b = 2;
@@ -41,7 +41,7 @@ public class CalculatorServiceTest {
     }
 
     @Test
-    public void mustDivideTwoValues() throws InvalidNumberException {
+    public void shouldDivideTwoValues() throws InvalidNumberException {
         // Scenery
         var a = 1;
         var b = 2;
@@ -54,7 +54,7 @@ public class CalculatorServiceTest {
     }
 
     @Test(expected = InvalidNumberException.class)
-    public void mustThrowExceptionWhenDividePerZero() throws InvalidNumberException {
+    public void shouldThrowExceptionWhenDividePerZero() throws InvalidNumberException {
         // Scenery
         var a = 1;
         var b = 0;
