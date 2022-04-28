@@ -135,7 +135,7 @@ public class LeaseServiceTest {
     }
 
     @Test
-    public void shouldPay75InThirteenMovie() throws LeaseException, MovieWithoutStockException {
+    public void shouldPay75InThirdMovie() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
         List<Movie> movies = List.of(
