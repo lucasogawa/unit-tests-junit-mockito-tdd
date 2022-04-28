@@ -2,7 +2,6 @@ package com.ogawalucas.services;
 
 import com.ogawalucas.entities.Movie;
 import com.ogawalucas.entities.User;
-import com.ogawalucas.exceptions.InvalidNumberException;
 import com.ogawalucas.exceptions.LeaseException;
 import com.ogawalucas.exceptions.MovieWithoutStockException;
 import org.hamcrest.CoreMatchers;
@@ -48,6 +47,8 @@ public class LeaseServiceTest {
 
     @Test
     public void shouldLeaseMovie() throws Exception {
+        Assume.assumeFalse(LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY);
+
         // Scenery
         var user = new User("name");
         var movies = List.of(new Movie("movie", 1, 1.0));
@@ -209,6 +210,8 @@ public class LeaseServiceTest {
 
     @Test
     public void shouldReturnMovieInMondayWhenLeaseIsInSaturday() throws LeaseException, MovieWithoutStockException {
+        Assume.assumeTrue(LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY);
+
         // Scenery
         var user = new User("name");
         List<Movie> movies = List.of(
