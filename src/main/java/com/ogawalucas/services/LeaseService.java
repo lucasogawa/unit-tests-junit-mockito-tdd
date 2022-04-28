@@ -6,6 +6,7 @@ import com.ogawalucas.entities.User;
 import com.ogawalucas.exceptions.LeaseException;
 import com.ogawalucas.exceptions.MovieWithoutStockException;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -27,7 +28,7 @@ public class LeaseService {
             user,
             movies,
             LocalDate.now(),
-            LocalDate.now().plusDays(1),
+            calculateReturnDate(LocalDate.now()),
             calculateValue(movies)
         );
     }
@@ -42,5 +43,15 @@ public class LeaseService {
                 default -> movies.get(index).leasePrice();
             })
             .reduce(0.0, Double::sum);
+    }
+
+    private LocalDate calculateReturnDate(LocalDate leaseDate) {
+        var returnDate = leaseDate.plusDays(1);
+
+        if (leaseDate.plusDays(1).getDayOfWeek() == DayOfWeek.SUNDAY) {
+            return returnDate.plusDays(1);
+        }
+
+        return returnDate;
     }
 }

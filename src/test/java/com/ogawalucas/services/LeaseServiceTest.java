@@ -10,6 +10,7 @@ import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -204,5 +205,20 @@ public class LeaseServiceTest {
 
         // Verification
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(14.0)));
+    }
+
+    @Test
+    public void shouldReturnMovieInMondayWhenLeaseIsInSaturday() throws LeaseException, MovieWithoutStockException {
+        // Scenery
+        var user = new User("name");
+        List<Movie> movies = List.of(
+            new Movie("Movie 1", 1, 5.0)
+        );
+
+        // Action
+        var lease = service.lease(user, movies);
+
+        // Verification
+        Assert.assertEquals(lease.returnDate().getDayOfWeek(), DayOfWeek.MONDAY);
     }
 }
