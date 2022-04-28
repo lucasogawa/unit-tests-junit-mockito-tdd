@@ -132,6 +132,7 @@ public class LeaseServiceTest {
         service.lease(user, movies);
     }
 
+    @Test
     public void shouldPay75InThirteenMovie() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
@@ -148,6 +149,7 @@ public class LeaseServiceTest {
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(11.0)));
     }
 
+    @Test
     public void shouldPay50InFourthMovie() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
@@ -165,6 +167,7 @@ public class LeaseServiceTest {
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(13.0)));
     }
 
+    @Test
     public void shouldPay25InFifthMovie() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
@@ -183,6 +186,7 @@ public class LeaseServiceTest {
         Assert.assertThat(lease.value(), CoreMatchers.is(CoreMatchers.equalTo(14.0)));
     }
 
+    @Test
     public void shouldPay0InSixthMovie() throws LeaseException, MovieWithoutStockException {
         // Scenery
         var user = new User("name");
